@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = "sampreethds10/docker-app"
+        DOCKER_IMAGE = "sampreethds10/python-app"
         DOCKER_CREDENTIALS = 'docker-hub-credentials'
         GIT_CREDENTIALS = 'github-credentials'
         HELM_CHART_PATH = './python-app'
