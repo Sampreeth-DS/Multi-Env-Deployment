@@ -30,9 +30,6 @@ pipeline {
                             git add version.txt
                             git commit -m "Update version to $NEW_VERSION"
                             git push https://$GIT_USER:$GIT_PASS@github.com/Sampreeth-DS/Multi-Env-Deployment.git HEAD:main
-                            pwd 
-                            ls -la
-                            tree
                         """
                     }
                 }
@@ -76,10 +73,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh '''
-                        echo "$WORKSPACE"
-                        helm upgrade --install python-app $HELM_CHART_PATH -n dev -f $HELM_CHART_PATH/dev_values.yaml --set image.tag=$NEW_VERSION
-                        '''
+                        sh "helm upgrade --install python-app $HELM_CHART_PATH -n dev -f $HELM_CHART_PATH/dev_values.yaml --set image.tag=$NEW_VERSION"
                     }
                     catch (Exception e) {
                         sh "helm rollback python-app -n dev"
