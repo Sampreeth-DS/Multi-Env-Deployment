@@ -30,6 +30,9 @@ pipeline {
                             git add version.txt
                             git commit -m "Update version to $NEW_VERSION"
                             git push https://$GIT_USER:$GIT_PASS@github.com/Sampreeth-DS/Multi-Env-Deployment.git HEAD:main
+                            pwd 
+                            ls -la
+                            tree
                         """
                     }
                 }
