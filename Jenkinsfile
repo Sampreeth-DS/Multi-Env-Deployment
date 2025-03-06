@@ -73,7 +73,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh "helm upgrade --install python-app $HELM_CHART_PATH -n dev -f $HELM_CHART_PATH/dev_values.yaml --set image.tag=$NEW_VERSION"
+                        sh "helm upgrade --install python-app $HELM_CHART_PATH -n dev -f dev_values.yaml --set image.tag=$NEW_VERSION"
                     }
                     catch (Exception e) {
                         sh "helm rollback python-app -n dev"
@@ -102,7 +102,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh "helm upgrade --install python-app $HELM_CHART_PATH -n test -f $HELM_CHART_PATH/test_values.yaml --set image.tag=$NEW_VERSION"
+                        sh "helm upgrade --install python-app $HELM_CHART_PATH -n test -f test_values.yaml --set image.tag=$NEW_VERSION"
                     }
                     catch (Exception e) {
                         sh "helm rollback python-app -n test"
@@ -131,7 +131,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh "helm upgrade --install python-app $HELM_CHART_PATH -n prod -f $HELM_CHART_PATH/prod_values.yaml --set image.tag=$NEW_VERSION"
+                        sh "helm upgrade --install python-app $HELM_CHART_PATH -n prod -f prod_values.yaml --set image.tag=$NEW_VERSION"
                     }
                     catch (Exception e) {
                         sh "helm rollback python-app -n prod"
