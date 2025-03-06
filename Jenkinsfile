@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('Clone Git Repository') {
             steps {
-                git branch: 'main', url: 'https://github.com/Sampreeth-DS/Docker-Pipeline.git'
+                git branch: 'main', url: 'https://github.com/Sampreeth-DS/Multi-Env-Deployment.git'
 
                 script {
                     def versionFile = readFile('version.txt').trim()
@@ -29,7 +29,7 @@ pipeline {
                             git config --global user.name "Sampreeth"
                             git add version.txt
                             git commit -m "Update version to $NEW_VERSION"
-                            git push https://$GIT_USER:$GIT_PASS@github.com/Sampreeth-DS/Docker-Pipeline.git HEAD:main
+                            git push https://$GIT_USER:$GIT_PASS@github.com/Sampreeth-DS/Multi-Env-Deployment.git HEAD:main
                         """
                     }
                 }
