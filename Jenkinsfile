@@ -16,7 +16,17 @@ pipeline {
                 script {
                     def versionFile = readFile('version.txt').trim()
                     def versionParts = versionFile.tokenize('.')
-                    def newVersion = "${versionParts[0]}.${versionParts[1].toInteger() + 1}"
+                    def majorVersion = versionParts[0].toInteger()
+                    def minorVersion = versionParts[1].toInteger()
+
+                    if (minorVersion == 9) {
+                        majorVersion += 1
+                        minorVersion = 0
+                    } else {
+                        minorVersion += 1
+                    }
+
+                    def newVersion = "${majorVersion}.${minorVersion}"
                     writeFile file: 'version.txt', text: newVersion
                     env.NEW_VERSION = newVersion
                     echo "New Docker Image Version: $NEW_VERSION"
@@ -73,7 +83,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh "helm upgrade --install python-app $HELM_CHART_PATH -n dev -f $HELM_CHART_PATH/dev_values.yaml --set image.tag=$NEW_VERSION --set revisionHistoryLimit=3"
+                        sh "helm upgrade --install python-app $HELM_CHART_PATH -n dev -f $HELM_CHART_PATH/dev_values.yaml --set image.tag=$NEW_VERSION"
                     }
                     catch (Exception e) {
                         sh "helm rollback python-app -n dev"
@@ -102,7 +112,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh "helm upgrade --install python-app $HELM_CHART_PATH -n test -f $HELM_CHART_PATH/test_values.yaml --set image.tag=$NEW_VERSION --set revisionHistoryLimit=3"
+                        sh "helm upgrade --install python-app $HELM_CHART_PATH -n test -f $HELM_CHART_PATH/test_values.yaml --set image.tag=$NEW_VERSION"
                     }
                     catch (Exception e) {
                         sh "helm rollback python-app -n test"
@@ -131,7 +141,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh "helm upgrade --install python-app $HELM_CHART_PATH -n prod -f $HELM_CHART_PATH/prod_values.yaml --set image.tag=$NEW_VERSION --set revisionHistoryLimit=3"
+                        sh "helm upgrade --install python-app $HELM_CHART_PATH -n prod -f $HELM_CHART_PATH/prod_values.yaml --set image.tag=$NEW_VERSION"
                     }
                     catch (Exception e) {
                         sh "helm rollback python-app -n prod"
